@@ -1,16 +1,20 @@
-html,
 body {
-  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Inter;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.link {
+  font-size: 20px;
+  text-decoration: none; /* Hides the underline */
+  color: black; /* Sets the text color to black */
+  transition: text-decoration 0.3s ease; /* Smooth transition for underline */
 }
 
-* {
-  box-sizing: border-box;
+.link:hover {
+  text-decoration: underline; /* Shows underline on hover */
+  font-weight: 500;
+}
+
+.banner {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
