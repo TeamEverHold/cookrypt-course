@@ -39,7 +39,7 @@ const Home: NextPage = () => {
               setTags(res.data.tags);
               const _tags = res.data.tags;
               if (_tags && _tags.length > 0) {
-                const t = 
+                // const t = 
                 writeContract({
                   ...cookryptMainContractConfig,
                   functionName: "registerTag",
