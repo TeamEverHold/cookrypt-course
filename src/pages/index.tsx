@@ -2,8 +2,41 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import ExampleDog from "../assets/example-dog.png";
 import { Button } from "@mui/material";
+import { useState } from "react";
+import { BrowserHistory, getTags } from '../api/getTags';
+import { RequestStatus } from '../api/status';
 
 const Home: NextPage = () => {
+  const [history, setHistory] = useState<BrowserHistory[]>([]);
+  const [tags, setTags] = useState();
+  const [tagStatus, setTagStatus] = useState<RequestStatus>("success");
+
+  const getData = () => {
+    setTagStatus("loading");
+    const extensionID = "hnalnahjnkgjeboogihgpdgalmbkeemc";
+    if (!chrome.runtime) {
+      alert("Please install extension");
+      console.log("Chrome runtime not found");
+    } else {
+      console.log("sending message");
+      chrome.runtime.sendMessage(
+        extensionID, {
+          getHistory: true,
+        },
+        (response) => {
+          //console.log(response);
+          setHistory(response.history);
+          // console.log(history);
+          getTags({history: history}).then((res) => {
+            setTagStatus("success");
+            setTags(res.data);
+            console.log("tags", tags);
+          }).catch((err) => alert(err));
+        }
+      );
+    }
+  };
+
   return (
     <div
       style={{
@@ -42,9 +75,11 @@ const Home: NextPage = () => {
             marginTop: "30vh",
           }}
         >
-          <div style={{
-            marginBottom: 20,
-          }}>
+          <div
+            style={{
+              marginBottom: 20,
+            }}
+          >
             <span
               style={{
                 fontSize: 24,
@@ -63,7 +98,9 @@ const Home: NextPage = () => {
             </span>
           </div>
           <div>
-            <Button variant="contained">Open data collector extension</Button>
+            <Button variant="contained" onClick={getData}>
+              Get and Upload Tags
+            </Button>
           </div>
         </div>
       </div>
