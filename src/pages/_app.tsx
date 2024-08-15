@@ -2,12 +2,15 @@ import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { config } from "../wagmi";
 import "../styles/globals.css";
 import TopBanner from "../components/TopBanner";
 import Head from "next/head";
-import Footer from '../components/Footer';
+import Footer from "../components/Footer";
+import { ThemeProvider } from "@emotion/react";
+import { myButtonTheme } from '../components/StyledButton';
+import { grey } from '@mui/material/colors';
 
 const client = new QueryClient();
 
@@ -15,7 +18,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={client}>
-        <RainbowKitProvider>
+        <RainbowKitProvider theme={lightTheme({
+          accentColor: grey[700],
+        })}>
           <Head>
             <title>Cookrypt App</title>
             <meta
@@ -24,17 +29,19 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
             <link href="/favicon.ico" rel="icon" />
           </Head>
-          <div
-            style={{
-              height: "100vh",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <TopBanner />
-            <Component {...pageProps} />
-            <Footer />
-          </div>
+          <ThemeProvider theme={myButtonTheme}>
+            <div
+              style={{
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <TopBanner />
+              <Component {...pageProps} />
+              <Footer />
+            </div>
+          </ThemeProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

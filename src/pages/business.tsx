@@ -1,6 +1,23 @@
-import { TextField } from "@mui/material";
+import { SearchOutlined } from "@mui/icons-material";
+import { FormControl, IconButton, TextField } from "@mui/material";
+import { useState } from "react";
+import { useAccount } from "wagmi";
+import TagsGetter from "../api/TagsGetter";
 
 const BusinessPage = () => {
+  const [address, setAddress] = useState<string>("");
+  const [addressQuery, setAddressQuery] = useState("");
+  const [tagsQuery, setTagsQuery] = useState("");
+  const account = useAccount();
+
+  const searchTagsByAddress = () => {
+    setAddress(addressQuery);
+  };
+
+  const searchUsersByTag = () => {
+    console.log(tagsQuery);
+  };
+
   return (
     <div
       style={{
@@ -28,9 +45,31 @@ const BusinessPage = () => {
         }}
       >
         <span style={{ marginBottom: 16, fontSize: 28, fontWeight: "bolder" }}>
-          Search tags of user here
+          Search tags of user
         </span>
-        <TextField label="Input user address" variant="outlined" />
+        <div style={{ display: "flex", width: "100%", flexDirection: "row" }}>
+          <TextField
+            label="User address"
+            name="address"
+            variant="outlined"
+            style={{ width: "80%" }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setAddressQuery(e.target.value);
+            }}
+          />
+          <IconButton
+            style={{ width: 64, height: 64, marginLeft: "auto" }}
+            onClick={searchTagsByAddress}
+          >
+            <SearchOutlined />
+          </IconButton>
+        </div>
+
+        {address === "" ? (
+          <></>
+        ) : (
+          <TagsGetter address={address as `0x$string`} />
+        )}
       </div>
       <div
         style={{
@@ -41,9 +80,28 @@ const BusinessPage = () => {
         }}
       >
         <span style={{ marginBottom: 16, fontSize: 28, fontWeight: "bolder" }}>
-          Search users with tag here
+          Search users with tag
         </span>
-        <TextField label="Input tag" variant="outlined" />
+        <div>
+          <FormControl
+            style={{ display: "flex", width: "100%", flexDirection: "row" }}
+          >
+            <TextField
+              label="Tag"
+              variant="outlined"
+              style={{ width: "80%" }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setTagsQuery(e.target.value);
+              }}
+            />
+            <IconButton
+              style={{ width: 64, height: 64, marginLeft: "auto" }}
+              onClick={searchUsersByTag}
+            >
+              <SearchOutlined />
+            </IconButton>
+          </FormControl>
+        </div>
       </div>
     </div>
   );

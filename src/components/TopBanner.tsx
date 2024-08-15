@@ -14,6 +14,7 @@ const TopBanner = () => {
         paddingRight: 16,
         paddingTop: 16,
         paddingBottom: 12,
+        marginBottom: 36,
       }}
     >
       <div

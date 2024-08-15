@@ -1,18 +1,23 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import ExampleDog from "../assets/example-dog.png";
-import { Button } from "@mui/material";
+import { Button, ThemeProvider } from "@mui/material";
 import { useState } from "react";
-import { BrowserHistory, getTags } from '../api/getTags';
-import { RequestStatus } from '../api/status';
+import { BrowserHistory, getTags } from "../api/getTags";
+import { RequestStatus } from "../api/status";
+import Tag from "../components/Tag";
+import { useWriteContract } from 'wagmi';
+import { cookryptMainContractConfig } from '../api/abis';
 
 const Home: NextPage = () => {
+  const {data, writeContract} = useWriteContract();
   const [history, setHistory] = useState<BrowserHistory[]>([]);
-  const [tags, setTags] = useState();
+  const [tags, setTags] = useState([]);
   const [tagStatus, setTagStatus] = useState<RequestStatus>("success");
 
   const getData = () => {
     setTagStatus("loading");
+    setTags([]);
     const extensionID = "hnalnahjnkgjeboogihgpdgalmbkeemc";
     if (!chrome.runtime) {
       alert("Please install extension");
@@ -20,18 +25,33 @@ const Home: NextPage = () => {
     } else {
       console.log("sending message");
       chrome.runtime.sendMessage(
-        extensionID, {
+        extensionID,
+        {
           getHistory: true,
         },
         (response) => {
           //console.log(response);
           setHistory(response.history);
           // console.log(history);
-          getTags({history: history}).then((res) => {
-            setTagStatus("success");
-            setTags(res.data);
-            console.log("tags", tags);
-          }).catch((err) => alert(err));
+          getTags({ history: response.history })
+            .then((res) => {
+              setTagStatus("success");
+              setTags(res.data.tags);
+              const _tags = res.data.tags;
+              if (_tags && _tags.length > 0) {
+                const t = 
+                writeContract({
+                  ...cookryptMainContractConfig,
+                  functionName: "registerTag",
+                  args: [_tags[0].tag],
+                });
+              }
+              console.log(`Uploading ${_tags[0].tag}`);
+            })
+            .catch((err) => {
+              setTagStatus("error");
+              alert(err);
+            });
         }
       );
     }
@@ -60,10 +80,10 @@ const Home: NextPage = () => {
           }}
         >
           <div style={{ marginBottom: 24 }}>
-            <Image src={ExampleDog} alt="" height={300} />
+            <Image src={ExampleDog} alt="" height={150} />
           </div>
           <Button variant="contained" style={{ width: "100%" }}>
-            View in xxx website
+            Play with it
           </Button>
         </div>
         <div
@@ -72,7 +92,9 @@ const Home: NextPage = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            marginTop: "30vh",
+            marginTop: "20vh",
+            paddingLeft: "10%",
+            paddingRight: "16%",
           }}
         >
           <div
@@ -97,10 +119,29 @@ const Home: NextPage = () => {
               ETH Received
             </span>
           </div>
-          <div>
-            <Button variant="contained" onClick={getData}>
-              Get and Upload Tags
+          <div
+            style={{
+              marginBottom: 20,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={getData}
+              disabled={tagStatus === "loading"}
+            >
+              {tagStatus === "loading" ? "Loading..." : "Get and Upload Tags"}
             </Button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
+            {tags.map((t) => (
+              <Tag key={t["tag"]} label={`${t["tag"]}`} />
+            ))}
           </div>
         </div>
       </div>
