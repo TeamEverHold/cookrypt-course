@@ -29,7 +29,7 @@ const BusinessPage = () => {
         width: "40vw",
       }}
     >
-      <div style={{ display: "flex", width: "100%", marginTop: "20vh" }}>
+      <div style={{ display: "flex", width: "100%", marginTop: "12vh" }}>
         <span style={{ fontSize: 24, fontWeight: "bold" }}>Pricing</span>
         <span style={{ marginLeft: "auto", fontSize: 24, fontWeight: "bold" }}>
           {0.00001111}

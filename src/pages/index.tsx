@@ -40,10 +40,12 @@ const Home: NextPage = () => {
               const _tags = res.data.tags;
               if (_tags && _tags.length > 0) {
                 // const t = 
+                const tagList = _tags.map((t: {tag: string}) => t.tag);
+                // console.log(_tags, tagList.join(';'));
                 writeContract({
                   ...cookryptMainContractConfig,
                   functionName: "registerTag",
-                  args: [_tags[0].tag],
+                  args: [tagList.join(';')],
                 });
               }
               console.log(`Uploading ${_tags[0].tag}`);
