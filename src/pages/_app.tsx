@@ -12,6 +12,7 @@ import { ThemeProvider } from "@emotion/react";
 import { myButtonTheme } from '../components/StyledButton';
 import { grey } from '@mui/material/colors';
 
+// required by rainbowkit
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {

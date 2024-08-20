@@ -1,0 +1,6 @@
+version: '3'
+services:
+  cookrypt-fe:
+    build: .
+    ports:
+      - 3001:3000
