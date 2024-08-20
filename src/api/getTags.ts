@@ -9,7 +9,7 @@ export interface PersonalData {
 }
 
 export const getTags = (data: PersonalData) => {
-  const url = "http://localhost:8000/tags";
+  const url = "https://api.demo.fracher21.top/cookrypt/tags";
   const history = data.history.map((h) => {
     return {
       title: h.title || "",
