@@ -14,7 +14,7 @@ const TagsGetter = (props: { address: `0x${string}` }) => {
       return <div></div>
     }
     const last = data[data.length - 1];
-    const tagList = last.split(';')
+    const tagList = last.split(';');
     return (
       <div style={{
         display: "flex",
