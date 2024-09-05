@@ -13,7 +13,7 @@ def parse_json_tag(tag: str):
 def get_tags(data):
 
     # 配置您的API密钥
-    genai.configure(api_key="AIzaSyAwD8PVzcrvNn8TMeFFHNXEw3TfBtLgGsw")
+    genai.configure(api_key="") # put your gemini api key here
 
     # 初始化模型，这里'gemini-1.5-flash'是示例模型名，您需要替换为实际可用的模型名
     model = genai.GenerativeModel('gemini-1.5-flash')
