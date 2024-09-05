@@ -1,0 +1,6 @@
+version: '3'
+services:
+  cookrypt-data-api:
+    build: .
+    ports:
+      - 8001:8000
